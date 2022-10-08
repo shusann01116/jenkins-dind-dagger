@@ -1,0 +1,30 @@
+version: '3'
+services:
+  jenkins:
+    build:
+      context: .
+    image: jenkins-dagger 
+    environment:
+      DOCKER_TLS_VERIFY: 1
+      DOCKER_HOST: tcp://docker:2376
+      DOCKER_CERT_PATH: /certs/client
+    volumes:
+      - certs:/certs:ro
+      - jenkins-data:/var/jenkins_home
+    ports:
+      - "8080:8080"
+      - "50000:50000"
+
+  docker:
+    image: docker:dind
+    privileged: true
+    environment:
+      DOCKER_TLS_CERTDIR: /certs
+    volumes:
+      - certs:/certs
+      - jenkins-data:/var/jenkins_home
+
+volumes:
+  certs:
+  jenkins-data:
+
