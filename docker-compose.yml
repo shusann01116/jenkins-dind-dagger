@@ -1,6 +1,7 @@
 version: '3'
 services:
   jenkins:
+    restart: unless-stopped
     build:
       context: .
     image: jenkins-dagger 
