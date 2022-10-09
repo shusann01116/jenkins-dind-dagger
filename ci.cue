@@ -12,7 +12,7 @@ dagger.#Plan & {
 			"./Jenkins/": read: contents: dagger.#FS
 		}
 		env: {
-			DOCKERHUB_CRED_USR:  string
+			DOCKERHUB_CRED_USR: string
 			DOCKERHUB_CRED_PSW: dagger.#Secret
 		}
 	}
@@ -31,8 +31,8 @@ dagger.#Plan & {
 					target:    "dagger-jenkins-agent"
 					"tag":     tag
 					image:     build.output
-					AUTH_USR:  client.env.DOCKERHUB_USR
-					AUTH_CRED: client.env.DOCKERHUB_CRED
+					AUTH_USR:  client.env.DOCKERHUB_CRED_USR
+					AUTH_CRED: client.env.DOCKERHUB_CRED_PSW
 				}
 			}
 
@@ -47,8 +47,8 @@ dagger.#Plan & {
 					target:    "dagger-jenkins-controller"
 					"tag":     tag
 					image:     build.output
-					AUTH_USR:  client.env.DOCKERHUB_USR
-					AUTH_CRED: client.env.DOCKERHUB_CRED
+					AUTH_USR:  client.env.DOCKERHUB_CRED_USR
+					AUTH_CRED: client.env.DOCKERHUB_CRED_PSW
 				}
 			}
 		}
