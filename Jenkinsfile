@@ -2,11 +2,14 @@ pipeline {
     agent { label 'dagger' }
 
     environment {
-        GREETING = 'Hello there, Jenkins! Hello!'
-      }
+      DOCKERHUB_CRED_USR = credentials('dockerhub-credential')
+      DOCKERHUB_CRED_PSW = credentials('dockerhub-credential')
+    }
     stages {
+      stage('build') {
         sh '''
-          dagger do hello
+          dagger do agent build
         '''
+      }
     }
 }
