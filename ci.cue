@@ -12,8 +12,8 @@ dagger.#Plan & {
 			"./Jenkins/": read: contents: dagger.#FS
 		}
 		env: {
-			DOCKERHUB_USR:  string
-			DOCKERHUB_CRED: dagger.#Secret
+			DOCKERHUB_CRED_USR:  string
+			DOCKERHUB_CRED_PSW: dagger.#Secret
 		}
 	}
 	actions: {
