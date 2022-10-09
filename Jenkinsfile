@@ -8,7 +8,7 @@ pipeline {
     stage('build') {
       steps {
         sh '''
-          dagger do agent --log-format plain
+          dagger do jenkins --log-format plain
         '''
       }
     }
