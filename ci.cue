@@ -9,7 +9,7 @@ import (
 dagger.#Plan & {
 	client: {
 		filesystem: {
-			"./agent/": read: contents: dagger.#FS
+			"./Jenkins/agent/": read: contents: dagger.#FS
 		}
 		env: {
 			DOCKERHUB_USR:  string
@@ -17,7 +17,7 @@ dagger.#Plan & {
 		}
 	}
 	actions: {
-		contents: client.filesystem."./agent/".read.contents
+		contents: client.filesystem."./Jenkins/agent/".read.contents
 
 		agent: {
 			tag:   "v0.1.0"

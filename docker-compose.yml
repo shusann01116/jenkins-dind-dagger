@@ -4,7 +4,7 @@ services:
     restart: unless-stopped
     build:
       context: .
-    image: jenkins-dagger 
+    image: jenkins-dagger
     environment:
       DOCKER_TLS_VERIFY: 1
       DOCKER_HOST: tcp://docker:2376
@@ -28,4 +28,3 @@ services:
 volumes:
   certs:
   jenkins-data:
-
