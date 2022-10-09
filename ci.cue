@@ -12,7 +12,7 @@ dagger.#Plan & {
 			"./agent/": read: contents: dagger.#FS
 		}
 		env: {
-			DOCKERHUB_USR:  dagger.#Secret
+			DOCKERHUB_USR:  string
 			DOCKERHUB_CRED: dagger.#Secret
 		}
 	}
@@ -20,7 +20,7 @@ dagger.#Plan & {
 		contents: client.filesystem."./agent/".read.contents
 
 		agent: {
-			tag:   "0.1.0"
+			tag:   "v0.1.0"
 			build: docker.#Build & {
 				steps: [
 					docker.#Dockerfile & {
