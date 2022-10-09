@@ -3,13 +3,13 @@ package main
 import (
 	"dagger.io/dagger"
 
-	"universe.dagger.io/docker"
+	"github.com/shusann01116/jenkins-dind-dagger/jenkins"
 )
 
 dagger.#Plan & {
 	client: {
 		filesystem: {
-			"./agent/": read: contents: dagger.#FS
+			"./Jenkins/": read: contents: dagger.#FS
 		}
 		env: {
 			DOCKERHUB_USR:  string
@@ -17,23 +17,38 @@ dagger.#Plan & {
 		}
 	}
 	actions: {
-		contents: client.filesystem."./agent/".read.contents
+		contents: client.filesystem."./Jenkins/".read.contents
 
-		agent: {
-			tag:   "v0.1.0"
-			build: docker.#Build & {
-				steps: [
-					docker.#Dockerfile & {
-						source: contents
-					},
-				]
+		"jenkins": {
+			agent: {
+				tag:   "v0.1.0"
+				build: jenkins.#Build & {
+					"contents": contents
+					dockerfile: "./agent/Dockerfile"
+				}
+
+				push: jenkins.#Push & {
+					target:    "dagger-jenkins-agent"
+					"tag":     tag
+					image:     build.output
+					AUTH_USR:  client.env.DOCKERHUB_USR
+					AUTH_CRED: client.env.DOCKERHUB_CRED
+				}
 			}
-			push: docker.#Push & {
-				image: build.output
-				dest:  "\(client.env.DOCKERHUB_USR)/jenkins-agent-dagger:\(tag)"
-				auth: {
-					username: client.env.DOCKERHUB_USR
-					secret:   client.env.DOCKERHUB_CRED
+
+			controller: {
+				tag:   "v0.1.0"
+				build: jenkins.#Build & {
+					"contents": contents
+					dockerfile: "./controller/Dockerfile"
+				}
+
+				push: jenkins.#Push & {
+					target:    "dagger-jenkins-controller"
+					"tag":     tag
+					image:     build.output
+					AUTH_USR:  client.env.DOCKERHUB_USR
+					AUTH_CRED: client.env.DOCKERHUB_CRED
 				}
 			}
 		}
