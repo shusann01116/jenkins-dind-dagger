@@ -7,9 +7,11 @@ pipeline {
     }
     stages {
       stage('build') {
-        sh '''
-          dagger do agent build
-        '''
+        steps {
+          sh '''
+            dagger do agent build
+          '''
+        }
       }
     }
 }
