@@ -2,7 +2,6 @@ package main
 
 import (
 	"dagger.io/dagger"
-	"dagger.io/dagger/core"
 
 	"universe.dagger.io/docker"
 )
@@ -10,18 +9,18 @@ import (
 dagger.#Plan & {
 	client: {
 		filesystem: {
-			"./agent/": read: contents:  dagger.#FS
-			".registry": read: contents: dagger.#Secret
+			"./agent/": read: contents: dagger.#FS
+		}
+		env: {
+			DOCKERHUB_USR:  dagger.#Secret
+			DOCKERHUB_CRED: dagger.#Secret
 		}
 	}
 	actions: {
 		contents: client.filesystem."./agent/".read.contents
 
 		agent: {
-			tag:      "0.1.0"
-			registry: core.#TrimSecret & {
-				input: client.filesystem.".registry".read.contents
-			}
+			tag:   "0.1.0"
 			build: docker.#Build & {
 				steps: [
 					docker.#Dockerfile & {
@@ -31,10 +30,10 @@ dagger.#Plan & {
 			}
 			push: docker.#Push & {
 				image: build.output
-				dest:  "shusann01116/jenkins-agent-dagger:\(tag)"
+				dest:  "\(client.env.DOCKERHUB_USR)/jenkins-agent-dagger:\(tag)"
 				auth: {
-					username: "shusann01116"
-					secret:   registry.output
+					username: client.env.DOCKERHUB_USR
+					secret:   client.env.DOCKERHUB_CRED
 				}
 			}
 		}
