@@ -9,7 +9,7 @@ pipeline {
       stage('build') {
         steps {
           sh '''
-            dagger do agent build
+            dagger do agent build --log-format plain
           '''
         }
       }
