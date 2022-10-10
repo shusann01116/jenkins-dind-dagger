@@ -29,12 +29,14 @@ import (
 	AUTH_USR:  string
 	AUTH_CRED: dagger.#Secret
 
-	docker.#Push & {
-		dest: strings.Join([AUTH_USR, "/", target, ":", tag], "")
-		auth: {
-			username: AUTH_USR
-			secret:   AUTH_CRED
+	for k, v in ["latest", tag] {
+		"tag-\(v)": docker.#Push & {
+			dest: strings.Join([AUTH_USR, "/", target, ":", v], "")
+			auth: {
+				username: AUTH_USR
+				secret:   AUTH_CRED
+			}
+			"image": image
 		}
-		"image": image
 	}
 }

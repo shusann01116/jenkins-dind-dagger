@@ -3,8 +3,8 @@ services:
   jenkins:
     restart: unless-stopped
     build:
-      context: .
-    image: dagger-jenkins-controller
+      context: ./Jenkins/controller
+    image: dagger-jenkins-controller:latest
     environment:
       DOCKER_TLS_VERIFY: 1
       DOCKER_HOST: tcp://docker:2376
